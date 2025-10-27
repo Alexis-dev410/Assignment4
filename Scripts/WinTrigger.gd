@@ -1,6 +1,6 @@
 extends Area3D
 
-@onready var win_ui: CanvasLayer = $"../WinCanvas"
+@onready var win_ui: CanvasLayer = $"../WinLoseCanvas"
 
 func _ready():
 	connect("body_entered", Callable(self, "_on_body_entered"))

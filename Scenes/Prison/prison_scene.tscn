@@ -156,7 +156,7 @@ skeleton = NodePath("../..")
 shape = SubResource("ConvexPolygonShape3D_vl5tn")
 
 [node name="Mannequin" parent="." groups=["Players", "Prisoner"] instance=ExtResource("77_n6m2i")]
-transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 2.887331, 0, -28.080427)
+transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 2.887331, 0, -28.504333)
 
 [node name="lever" type="Area3D" parent="."]
 transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 9.86317, 1.92239, -24.8637)
@@ -307,11 +307,11 @@ mesh = SubResource("SphereMesh_8k55r")
 skeleton = NodePath("../Patrol1")
 
 [node name="PrisonGuard" parent="." node_paths=PackedStringArray("patrol_points") instance=ExtResource("10_vl5tn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.559795, 0.2, -8.704937)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.559795, 0.30074722, -8.704937)
 patrol_points = [NodePath("../Patrol1"), NodePath("../Patrol2")]
 
 [node name="PrisonGuard2" parent="." node_paths=PackedStringArray("patrol_points") instance=ExtResource("10_vl5tn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.559795, 0.2, -8.704937)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.559795, 0.30074722, -8.704937)
 patrol_points = [NodePath("../Patrol2"), NodePath("../Patrol3")]
 
 [node name="PrisonGuard3" parent="." instance=ExtResource("10_vl5tn")]

@@ -5,7 +5,7 @@ class_name Patrolling
 @onready var navigation_agent: NavigationAgent3D = $"../../NavigationAgent3D"
 @onready var animation_player: AnimationPlayer = $"../../AnimationPlayer"
 @onready var guard_body: CharacterBody3D = $"../.."
-@onready var prisoner: Node3D = get_tree().get_first_node_in_group("Players") # updated name
+@onready var prisoner: Node3D = get_tree().get_first_node_in_group("Players")
 
 var patrol_index := 0
 @export var patrol_speed := 1.5
@@ -17,8 +17,8 @@ func enter(_msg := {}) -> void:
 	if patrol_points.is_empty():
 		state_machine.transition_to("Idle")
 		return
-	
-	# ✅ Force animation to "Walk" every time we enter this state
+
+
 	if animation_player.current_animation != "Walk":
 		animation_player.play("Walk")
 
