@@ -11,7 +11,7 @@ class_name Chasing
 @export var attack_range := 1.0
 @export var attack_buffer := 0.2
 @export var vision_range := 20.0
-@export var vision_angle := 360.0
+@export var vision_angle := 90.0
 @export var lose_sight_timer := 2.0
 
 var time_since_seen := 0.0
