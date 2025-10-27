@@ -75,3 +75,15 @@ func unlock_speed():
 
 func _on_camera_root_camera_orientation_changed(rotation_y_rad)-> void:
 	camera_rotation_y = rotation_y_rad
+
+func on_hit():
+	# Stop player movement
+	lock_the_speed()
+	velocity = Vector3.ZERO
+
+	# Find the lose canvas in the current scene
+	var lose_canvas: CanvasLayer = get_tree().current_scene.get_node("WinLoseCanvas") as CanvasLayer
+	if lose_canvas:
+		lose_canvas.show_lose_screen()
+	else:
+		print("[Player] Lose canvas not found")

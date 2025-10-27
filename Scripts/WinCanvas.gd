@@ -42,8 +42,3 @@ func _on_restart_pressed():
 func _on_quit_button_pressed():
 	print("[WinCanvas] Quit button pressed.")
 	get_tree().quit()
-
-
-
-func _on_restart_button_pressed() -> void:
-	pass # Replace with function body.

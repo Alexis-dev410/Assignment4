@@ -4,7 +4,8 @@ class_name Chasing
 @onready var navigation_agent: NavigationAgent3D = $"../../NavigationAgent3D"
 @onready var animation_player: AnimationPlayer = $"../../AnimationPlayer"
 @onready var guard_body: CharacterBody3D = $"../.."
-@onready var prisoner: Node3D = get_tree().get_first_node_in_group("Prisoner")
+@onready var prisoner: Node3D = get_tree().get_first_node_in_group("Players")
+@onready var patrol_points: Array[Node3D] = $"../..".patrol_points
 
 @export var chase_speed := 4.0
 @export var attack_range := 1.0
@@ -24,7 +25,11 @@ func update(delta: float) -> void:
 		return
 
 	if not is_instance_valid(prisoner):
-		state_machine.transition_to("Idle")
+		# Check patrol points to decide where to go
+		if patrol_points and not patrol_points.is_empty():
+			state_machine.transition_to("Patrolling")
+		else:
+			state_machine.transition_to("Idle")
 		return
 
 	var to_prisoner = prisoner.global_position - guard_body.global_position
@@ -32,11 +37,8 @@ func update(delta: float) -> void:
 
 	# Within attack range → transition to attacking
 	if dist <= attack_range + attack_buffer:
-		navigation_agent.target_position = guard_body.global_position
-		navigation_agent.velocity = Vector3.ZERO
-		guard_body.velocity = Vector3.ZERO
-		guard_body.move_and_slide()
-		orient_guard(to_prisoner.normalized())
+		if is_instance_valid(navigation_agent):
+			navigation_agent.set_physics_process(false)
 		call_deferred("transition_to_attacking")
 		return
 
@@ -48,7 +50,14 @@ func update(delta: float) -> void:
 	else:
 		time_since_seen += delta
 		if time_since_seen > lose_sight_timer:
-			state_machine.transition_to("Idle")
+			if patrol_points and not patrol_points.is_empty():
+				# Resume patrolling from last index
+				var patrolling_state = get_node("../Patrolling") as Patrolling
+				if patrolling_state:
+					patrolling_state.patrol_index = patrolling_state.patrol_index % patrol_points.size()
+				state_machine.transition_to("Patrolling")
+			else:
+				state_machine.transition_to("Idle")
 
 func move_guard(_delta: float) -> void:
 	if navigation_agent.is_navigation_finished():

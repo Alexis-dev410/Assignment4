@@ -5,15 +5,23 @@ class_name Patrolling
 @onready var navigation_agent: NavigationAgent3D = $"../../NavigationAgent3D"
 @onready var animation_player: AnimationPlayer = $"../../AnimationPlayer"
 @onready var guard_body: CharacterBody3D = $"../.."
-@onready var prisoner: Node3D = get_tree().get_first_node_in_group("Prisoner")
+@onready var prisoner: Node3D = get_tree().get_first_node_in_group("Players") # updated name
 
 var patrol_index := 0
-@export var patrol_speed := 2.5
+@export var patrol_speed := 1.5
 @export var vision_range := 20.0
-@export var vision_angle := 360.0
+@export var vision_angle := 90.0
 
 func enter(_msg := {}) -> void:
-	animation_player.play("Walk")
+	print("[Patrolling] Entered Patrolling state.")
+	if patrol_points.is_empty():
+		state_machine.transition_to("Idle")
+		return
+	
+	# ✅ Force animation to "Walk" every time we enter this state
+	if animation_player.current_animation != "Walk":
+		animation_player.play("Walk")
+
 	select_next_target()
 
 func update(delta: float) -> void:
@@ -28,7 +36,6 @@ func update(delta: float) -> void:
 
 	if can_see_prisoner():
 		state_machine.transition_to("Chasing")
-
 
 func move_guard(_delta: float) -> void:
 	var next_path_point = navigation_agent.get_next_path_position()

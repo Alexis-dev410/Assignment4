@@ -6,7 +6,7 @@ class_name Idle
 @onready var prisoner: Node3D = get_tree().get_first_node_in_group("Prisoner")
 
 @export var vision_range := 20.0
-@export var vision_angle := 360.0
+@export var vision_angle := 50.0
 @export var attack_range := 1.0
 
 func enter(_msg := {}) -> void:
