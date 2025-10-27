@@ -12,8 +12,10 @@ class_name Attacking
 
 var attack_timer := 0.0
 var attack_position := Vector3.ZERO
+var is_attacking := false
 
 func enter(_msg := {}) -> void:
+	# Clamp position at start of attack
 	attack_position = guard_body.global_position
 	guard_body.velocity = Vector3.ZERO
 	guard_body.move_and_slide()
@@ -22,6 +24,7 @@ func enter(_msg := {}) -> void:
 		navigation_agent.velocity = Vector3.ZERO
 	animation_player.play("Attack")
 	attack_timer = 0.0
+	is_attacking = true
 
 func update(delta: float) -> void:
 	if not is_instance_valid(prisoner):
@@ -31,18 +34,19 @@ func update(delta: float) -> void:
 	var to_prisoner = (prisoner.global_position - guard_body.global_position).normalized()
 	var dist = guard_body.global_position.distance_to(prisoner.global_position)
 
-	# Clamp position
+	# Clamp guard in place during attack
 	guard_body.global_position = attack_position
 	orient_guard(to_prisoner)
 
-	# Re-trigger attack animation
+	# Re-trigger attack animation if finished and cooldown passed
 	attack_timer += delta
 	if not animation_player.is_playing() and attack_timer > attack_cooldown:
 		animation_player.play("Attack")
 		attack_timer = 0.0
 
-	# Exit to chasing if prisoner moves far
+	# Only allow exit if prisoner moves far
 	if dist > attack_exit_buffer:
+		is_attacking = false
 		state_machine.transition_to("Chasing")
 
 func orient_guard(direction: Vector3):

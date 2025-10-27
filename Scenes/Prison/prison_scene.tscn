@@ -1,7 +1,10 @@
-[gd_scene load_steps=19 format=4 uid="uid://c8ke5kwwokhpc"]
+[gd_scene load_steps=23 format=4 uid="uid://c8ke5kwwokhpc"]
 
 [ext_resource type="Texture2D" uid="uid://dcmpt5dchriin" path="res://Scenes/Prison/overcast_soil_4k.exr" id="1_mhg4v"]
 [ext_resource type="PackedScene" uid="uid://clhl1scru7c76" path="res://Scenes/Prison/prison.tscn" id="2_rr636"]
+[ext_resource type="Script" uid="uid://o4c8jlxxe3mf" path="res://Scripts/WinTrigger.gd" id="8_pvxny"]
+[ext_resource type="Script" uid="uid://rkgi5lwcfbj5" path="res://Scripts/restart.gd" id="9_vl5tn"]
+[ext_resource type="Script" uid="uid://dq36y2mno4r42" path="res://Scripts/qut.gd" id="10_8k55r"]
 [ext_resource type="PackedScene" uid="uid://ytjna2xipwtj" path="res://Scenes/Mannequin/mannequin_player.tscn" id="77_n6m2i"]
 [ext_resource type="Script" uid="uid://bna2qmhigpf48" path="res://Scenes/Prison/lever.gd" id="81_2im2n"]
 [ext_resource type="Texture2D" uid="uid://j7rwfiyncabd" path="res://Scenes/Prison/switchers/textures/switchers_baseColor.png" id="81_57mbe"]
@@ -111,6 +114,9 @@ shadow_mesh = SubResource("ArrayMesh_kfjvu")
 [sub_resource type="BoxShape3D" id="BoxShape3D_jxcv5"]
 size = Vector3(1.0952148, 2.185669, 1)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_2haqi"]
+size = Vector3(5, 8, 1)
+
 [node name="Prison_scene" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -171,4 +177,58 @@ you can escape the prison through the gate.
 Beware of the prison guards.
 Good luck!"
 
+[node name="WinZone" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.2522597, 3.2658374, 24.092321)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WinZone"]
+shape = SubResource("BoxShape3D_2haqi")
+
+[node name="WinCanvas" type="CanvasLayer" parent="."]
+script = ExtResource("8_pvxny")
+
+[node name="Panel" type="Panel" parent="WinCanvas"]
+offset_right = 1148.0
+offset_bottom = 645.0
+
+[node name="Label" type="Label" parent="WinCanvas/Panel"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -162.0
+offset_right = -86.0
+offset_bottom = 23.0
+grow_horizontal = 2
+scale = Vector2(5, 5)
+size_flags_horizontal = 4
+text = "YOU WIN!"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="WinCanvas/Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -110.99994
+offset_top = -110.5
+offset_right = -35.99994
+offset_bottom = -44.5
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(3.5, 3.5)
+
+[node name="RestartButton" type="Button" parent="WinCanvas/Panel/VBoxContainer"]
+layout_mode = 2
+text = "RESTART"
+script = ExtResource("9_vl5tn")
+
+[node name="QuitButton" type="Button" parent="WinCanvas/Panel/VBoxContainer"]
+layout_mode = 2
+text = "QUIT"
+script = ExtResource("10_8k55r")
+
 [connection signal="body_entered" from="lever" to="lever" method="_on_body_entered"]
+[connection signal="body_entered" from="WinZone" to="WinCanvas" method="_on_win_zone_body_entered"]
+[connection signal="pressed" from="WinCanvas/Panel/VBoxContainer/RestartButton" to="WinCanvas" method="_on_restart_pressed"]
+[connection signal="pressed" from="WinCanvas/Panel/VBoxContainer/QuitButton" to="WinCanvas" method="_on_quit_button_pressed"]

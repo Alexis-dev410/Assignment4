@@ -19,17 +19,18 @@ func enter(_msg := {}) -> void:
 	animation_player.play("Run")
 
 func update(delta: float) -> void:
+	# Don't override Attacking
 	if state_machine.current_state.name == "Attacking":
 		return
 
 	if not is_instance_valid(prisoner):
-		state_machine.transition_to("Patrolling")
+		state_machine.transition_to("Idle")
 		return
 
 	var to_prisoner = prisoner.global_position - guard_body.global_position
 	var dist = to_prisoner.length()
 
-	# PRIORITY: ATTACK
+	# Within attack range → transition to attacking
 	if dist <= attack_range + attack_buffer:
 		navigation_agent.target_position = guard_body.global_position
 		navigation_agent.velocity = Vector3.ZERO
@@ -39,17 +40,15 @@ func update(delta: float) -> void:
 		call_deferred("transition_to_attacking")
 		return
 
-	# PLAYER IN SIGHT
+	# See prisoner → move toward them
 	if can_see_prisoner():
 		time_since_seen = 0.0
 		navigation_agent.target_position = prisoner.global_position
+		move_guard(delta)
 	else:
 		time_since_seen += delta
 		if time_since_seen > lose_sight_timer:
-			state_machine.transition_to("Patrolling")
-			return
-
-	move_guard(delta)
+			state_machine.transition_to("Idle")
 
 func move_guard(_delta: float) -> void:
 	if navigation_agent.is_navigation_finished():

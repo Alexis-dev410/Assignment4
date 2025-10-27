@@ -7,8 +7,7 @@ class_name Idle
 
 @export var vision_range := 20.0
 @export var vision_angle := 360.0
-
-var prisoner_seen := false
+@export var attack_range := 1.0
 
 func enter(_msg := {}) -> void:
 	print("[Idle] Entered Idle state.")
@@ -16,18 +15,27 @@ func enter(_msg := {}) -> void:
 	guard_body.velocity = Vector3.ZERO
 	guard_body.move_and_slide()
 
-	# Only check once on enter
-	if can_see_prisoner():
-		prisoner_seen = true
-		print("[Idle] Prisoner detected! Switching to Chasing.")
-		call_deferred("_switch_to_chasing")
+	# Check once on enter if prisoner is in sight
+	if is_instance_valid(prisoner):
+		var dist = guard_body.global_position.distance_to(prisoner.global_position)
+		if dist <= attack_range:
+			print("[Idle] Prisoner in attack range! Switching to Attacking.")
+			call_deferred("_switch_to_attacking")
+		elif can_see_prisoner():
+			print("[Idle] Prisoner detected! Switching to Chasing.")
+			call_deferred("_switch_to_chasing")
 
 func update(_delta: float) -> void:
-	# Idle stays idle; don't keep checking here
+	# Idle stays idle; do not continuously check to prevent overwriting other states
 	pass
 
 func _switch_to_chasing():
-	state_machine.transition_to("Chasing")
+	if is_instance_valid(state_machine):
+		state_machine.transition_to("Chasing")
+
+func _switch_to_attacking():
+	if is_instance_valid(state_machine):
+		state_machine.transition_to("Attacking")
 
 func can_see_prisoner() -> bool:
 	if not is_instance_valid(prisoner):
