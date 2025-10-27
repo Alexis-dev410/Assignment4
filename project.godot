@@ -14,6 +14,10 @@ config/name="Assignment 4 - Prison"
 config/features=PackedStringArray("4.5", "Mobile")
 config/icon="res://icon.svg"
 
+[autoload]
+
+GlobalSignals="*res://Scripts/GlobalSignals.gd"
+
 [global_group]
 
 Prisoner=""
