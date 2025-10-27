@@ -1,0 +1,11 @@
+Model Information:
+* title:	Race Fence
+* source:	https://sketchfab.com/3d-models/race-fence-05ddea3908a8438d9bcf8f12428ee4d3
+* author:	Franjo Badurina (https://sketchfab.com/rumesic)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Race Fence" (https://sketchfab.com/3d-models/race-fence-05ddea3908a8438d9bcf8f12428ee4d3) by Franjo Badurina (https://sketchfab.com/rumesic) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
